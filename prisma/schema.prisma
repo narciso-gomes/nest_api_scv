@@ -22,11 +22,11 @@ model Unity {
 }
 
 model Product {
-  id        BigInt @id @default(autoincrement())
-  name      String @unique
-  priceSale Float
-  unity     Unity  @relation(fields: [unityId], references: [id])
-  unityId   BigInt @map("unity_id")
+  id        BigInt  @id @default(autoincrement())
+  name      String  @unique
+  priceSale Decimal @db.Money
+  unity     Unity   @relation(fields: [unityId], references: [id])
+  unityId   BigInt  @map("unity_id")
 
   @@map("product")
 }
