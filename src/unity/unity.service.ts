@@ -36,7 +36,7 @@ export class UnityService {
     };
   }
   create(createUnityDto: CreateUnityDto) {
-    return 'This action adds a new unity';
+    return this.repository.create(createUnityDto);
   }
 
   findAll() {
