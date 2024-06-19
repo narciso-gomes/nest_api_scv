@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { CreateUnityDto } from './dto/create-unity.dto';
 import { UpdateUnityDto } from './dto/update-unity.dto';
 import { UnityRepository } from './repository/unity.repository';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UnityService {
-  constructor(private readonly repository: UnityRepository) {}
+  constructor(private readonly repository: UnityRepository, private readonly prisma: PrismaService) { }
   async paginate(
     page: number,
     size: number,
@@ -35,15 +37,22 @@ export class UnityService {
       },
     };
   }
+
   create(createUnityDto: CreateUnityDto) {
     return this.repository.create(createUnityDto);
   }
 
-  update(id: number, updateUnityDto: UpdateUnityDto) {
+  update(id: bigint, updateUnityDto: UpdateUnityDto) {
     return this.repository.update(id, updateUnityDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} unity`;
+  remove(id: bigint) {
+    return this.repository.remove(id)
+  }
+
+  async findById(id: bigint) {
+    return await this.prisma.unity.findFirstOrThrow({
+      where: { id }
+    })
   }
 }

@@ -5,8 +5,9 @@ import {
   BadGatewayException,
   CallHandler,
   ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { NotFoundError, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable()
@@ -21,7 +22,8 @@ export class ErrorsInterceptor implements NestInterceptor {
               throw new ConflictException(
                 'Um registro com esse nome já existe',
               );
-            break;
+          case 'P2025':
+            throw new NotFoundException('Registro não encontrado');
           default:
             break;
         }

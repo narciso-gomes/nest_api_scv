@@ -14,17 +14,22 @@ import { UpdateUnityDto } from './dto/update-unity.dto';
 
 @Controller('unity')
 export class UnityController {
-  constructor(private readonly unityService: UnityService) {}
+  constructor(private readonly unityService: UnityService) { }
 
   @Get('pages?')
-  async pagination(@Request() request) {
-    return await this.unityService.paginate(
+  pagination(@Request() request) {
+    return this.unityService.paginate(
       request.query.hasOwnProperty('page') ? request.query.page : 0,
       request.query.hasOwnProperty('size') ? request.query.size : 10,
       request.query.hasOwnProperty('sort') ? request.query.sort : 'name',
       request.query.hasOwnProperty('order') ? request.query.order : 'asc',
       request.query.hasOwnProperty('search') ? request.query.search : '',
     );
+  }
+
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    return this.unityService.findById(BigInt(id))
   }
 
   @Post()
@@ -34,11 +39,11 @@ export class UnityController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUnityDto: UpdateUnityDto) {
-    return this.unityService.update(+id, updateUnityDto);
+    return this.unityService.update(BigInt(id), updateUnityDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.unityService.remove(+id);
+    return this.unityService.remove(BigInt(id));
   }
 }

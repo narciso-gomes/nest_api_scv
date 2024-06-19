@@ -5,7 +5,7 @@ import { UpdateUnityDto } from '../dto/update-unity.dto';
 
 @Injectable()
 export class UnityRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async paginate(
     page: number,
@@ -31,10 +31,16 @@ export class UnityRepository {
     return await this.prisma.unity.create({ data: createUnityDto });
   }
 
-  async update(id: number, updateUnityDto: UpdateUnityDto) {
+  async update(id: bigint, updateUnityDto: UpdateUnityDto) {
     return await this.prisma.unity.update({
       where: { id },
       data: updateUnityDto,
     });
+  }
+
+  async remove(id: bigint) {
+    return await this.prisma.unity.delete({
+      where: { id }
+    })
   }
 }
