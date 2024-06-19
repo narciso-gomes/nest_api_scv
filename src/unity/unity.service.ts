@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUnityDto } from './dto/create-unity.dto';
 import { UpdateUnityDto } from './dto/update-unity.dto';
-import { UnityRepository } from './repository/unity.repository';
-import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UnityService {
-  constructor(private readonly repository: UnityRepository, private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) { }
   async paginate(
     page: number,
     size: number,
@@ -15,13 +13,17 @@ export class UnityService {
     order: string,
     search: string,
   ) {
-    const { results, totalItems } = await this.repository.paginate(
-      page,
-      size,
-      sort,
-      order,
-      search,
-    );
+
+    const results = await this.prisma.unity.findMany({
+      skip: page * size,
+      take: Number(size),
+      where: { name: { contains: search } },
+      orderBy: { [sort]: order },
+    });
+
+    const totalItems = await this.prisma.unity.count({
+      where: { name: { contains: search, mode: 'insensitive' } },
+    });
 
     const totalPages = Math.ceil(totalItems / size) - 1;
     const currentPage = Number(page);
@@ -38,16 +40,21 @@ export class UnityService {
     };
   }
 
-  create(createUnityDto: CreateUnityDto) {
-    return this.repository.create(createUnityDto);
+  async create(createUnityDto: CreateUnityDto) {
+    return await this.prisma.unity.create({ data: createUnityDto });
   }
 
-  update(id: bigint, updateUnityDto: UpdateUnityDto) {
-    return this.repository.update(id, updateUnityDto);
+  async update(id: bigint, updateUnityDto: UpdateUnityDto) {
+    return await this.prisma.unity.update({
+      where: { id },
+      data: updateUnityDto,
+    });
   }
 
-  remove(id: bigint) {
-    return this.repository.remove(id)
+  async remove(id: bigint) {
+    return await this.prisma.unity.delete({
+      where: { id }
+    })
   }
 
   async findById(id: bigint) {
