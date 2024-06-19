@@ -32,16 +32,6 @@ export class UnityController {
     return this.unityService.create(createUnityDto);
   }
 
-  @Get()
-  findAll() {
-    return this.unityService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.unityService.findOne(+id);
-  }
-
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUnityDto: UpdateUnityDto) {
     return this.unityService.update(+id, updateUnityDto);

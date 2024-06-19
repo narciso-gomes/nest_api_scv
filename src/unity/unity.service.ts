@@ -39,16 +39,8 @@ export class UnityService {
     return this.repository.create(createUnityDto);
   }
 
-  findAll() {
-    return `This action returns all unity`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} unity`;
-  }
-
   update(id: number, updateUnityDto: UpdateUnityDto) {
-    return `This action updates a #${id} unity`;
+    return this.repository.update(id, updateUnityDto);
   }
 
   remove(id: number) {
