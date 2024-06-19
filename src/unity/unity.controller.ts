@@ -11,7 +11,9 @@ import {
 import { UnityService } from './unity.service';
 import { CreateUnityDto } from './dto/create-unity.dto';
 import { UpdateUnityDto } from './dto/update-unity.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Unidades')
 @Controller('unity')
 export class UnityController {
   constructor(private readonly unityService: UnityService) { }

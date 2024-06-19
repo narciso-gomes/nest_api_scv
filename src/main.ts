@@ -11,10 +11,9 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new ErrorsInterceptor());
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats api description')
+    .setTitle('SCV')
+    .setDescription('App SCV')
     .setVersion('1.0')
-    .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
